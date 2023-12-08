@@ -1,0 +1,42 @@
+#!/bin/bash
+
+echo "text/html; charset=UTF-8";
+echo "";
+
+cat $(dirname $0)/index.html
+
+[ ! $CONTENT_LENGTH ] && exit 0;
+
+decode() { 
+  python -c "import sys; from urllib.parse import unquote_plus; print(unquote_plus(sys.argv[1]));" $1 
+}
+
+# echo $CONTENT_LENGTH
+
+read -n "$CONTENT_LENGTH" QUERY_STRING
+# echo $QUERY_STRING
+
+declare -A param   
+while IFS='=' read -r -d '&' key value; do
+    param["$key"]=$value
+done <<<"${QUERY_STRING:+"${QUERY_STRING}&"}"
+
+# DATE=$(date +"%Y-%m-%d")
+# TIME=$(date +"%H:%M:%S")
+
+[ ${param[date]} ] && DATE=$(decode ${param[date]})
+[ ${param[time]} ] && TIME=$(decode ${param[time]})
+[ ${param[title]} ] && TITLE=$(decode ${param[title]})
+[ ${param[body]} ] && BODY=$(decode ${param[body]})
+
+if [ $TIME ]; then
+  TIME+=:
+elif [ $DATE ]; then
+  DATE+=:
+fi
+
+jrnl "${DATE} ${TIME} ${TITLE}\n${BODY}" 
+
+# echo 1 $DATE 2 $TIME 3 $TITLE 4 $BODY
+
+exit 0

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>jrnl new</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+</head>
+
+<body>
+    <main class="container">
+        <form action="/cgi-bin/jrnl-new" method="post">
+            <div class="grid">
+                <label for="date">Date
+                    <input type="date" id="date" name="date">
+                </label>
+                <label for="time">Time
+                    <input type="time" id="time" name="time">
+                </label>
+            </div>
+            <small>Leave empty to set date and time default</small>
+            <label for="title">Title</label>
+            <input type="text" id="title" name="title" placeholder="You can use star(*) and tags(@) in title." required>
+            <textarea id="body" name="body" rows="5"></textarea>
+            <input type="submit" class="outline" value="Submit">
+        </form>
+    </main>
+</body>
+
+</html>
